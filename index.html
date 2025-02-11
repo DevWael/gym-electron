@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Electron App</title>
+</head>
+<body style="padding: 20px;">
+    <h1>Hello Electron!</h1>
+    <p>Click count: <span id="count">0</span></p>
+    <button id="clickBtn" style="padding: 10px 20px;">Click Me</button>
+
+    <script>
+        const btn = document.getElementById('clickBtn')
+        const countSpan = document.getElementById('count')
+        let count = 0
+
+        btn.addEventListener('click', () => {
+            count++
+            countSpan.textContent = count
+        })
+    </script>
+</body>
+</html>
