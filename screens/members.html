@@ -1,0 +1,26 @@
+<div class="members-screen">
+    <h2>Manage Members</h2>
+    
+    <div class="add-member-form">
+        <input type="text" id="memberName" placeholder="Member name">
+        <select id="membershipType">
+            <option value="Basic">Basic</option>
+            <option value="Premium">Premium</option>
+        </select>
+        <button class="add-btn" onclick="addNewMember()">Add Member</button>
+    </div>
+
+    <div class="table-container">
+        <table id="membersTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Membership</th>
+                    <th>Join Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="membersList"></tbody>
+        </table>
+    </div>
+</div>

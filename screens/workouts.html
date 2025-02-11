@@ -1,0 +1,27 @@
+<div class="workouts-screen">
+    <h2>Manage Workouts</h2>
+    
+    <div class="add-workout-form">
+        <input type="text" id="workoutName" placeholder="Workout name">
+        <input type="number" id="workoutDuration" placeholder="Duration (mins)">
+        <select id="workoutDifficulty">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+        </select>
+        <button class="add-btn" onclick="addNewWorkout()">Add Workout</button>
+    </div>
+
+    <div class="table-container">
+        <table id="workoutsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Duration</th>
+                    <th>Difficulty</th>
+                </tr>
+            </thead>
+            <tbody id="workoutsList"></tbody>
+        </table>
+    </div>
+</div>

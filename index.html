@@ -2,22 +2,19 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Simple Electron App</title>
+    <title>Gym Management</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body style="padding: 20px;">
-    <h1>Hello Electron!</h1>
-    <p>Click count: <span id="count">0</span></p>
-    <button id="clickBtn" style="padding: 10px 20px;">Click Me</button>
+<body>
+    <nav class="navbar">
+        <button class="nav-btn" onclick="loadScreen('dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="loadScreen('members')">Members</button>
+        <button class="nav-btn" onclick="loadScreen('workouts')">Workouts</button>
+    </nav>
+    
+    <div id="content" class="content"></div>
 
-    <script>
-        const btn = document.getElementById('clickBtn')
-        const countSpan = document.getElementById('count')
-        let count = 0
-
-        btn.addEventListener('click', () => {
-            count++
-            countSpan.textContent = count
-        })
-    </script>
+    <script src="data.js"></script>
+    <script src="renderer.js"></script>
 </body>
 </html>

@@ -1,0 +1,65 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background: #2c3e50;
+    padding: 15px;
+}
+
+.nav-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.nav-btn:hover {
+    background: #2980b9;
+}
+
+.content {
+    padding: 20px;
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 8px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+.add-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
