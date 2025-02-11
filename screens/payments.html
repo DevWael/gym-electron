@@ -1,0 +1,24 @@
+<div class="payments-screen">
+    <h2>Payment Management</h2>
+    
+    <div class="add-payment-form">
+        <select id="paymentMember" class="form-control">
+            <option value="">Select Member</option>
+        </select>
+        <input type="number" id="paymentAmount" placeholder="Amount">
+        <button class="add-btn" onclick="recordPayment()">Record Payment</button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsList"></tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="attendance-screen">
+    <h2>Attendance Tracking</h2>
+    
+    <div class="attendance-controls">
+        <select id="attendanceMember" class="form-control">
+            <option value="">Select Member</option>
+        </select>
+        <button class="add-btn" onclick="recordCheckin()">Record Check-in</button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Check-in Time</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceList"></tbody>
+        </table>
+    </div>
+</div>

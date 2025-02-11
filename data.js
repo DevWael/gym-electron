@@ -1,4 +1,4 @@
-let members = JSON.parse(localStorage.getItem('members') || [];
+let members = JSON.parse(localStorage.getItem('members')) || [];
 let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
 
 function saveMembers() {
@@ -10,10 +10,12 @@ function saveWorkouts() {
 }
 
 // Members CRUD
-function addMember(name, membershipType) {
+function addMember(name, email, phone, membershipType) {
     members.push({
         id: Date.now(),
         name,
+        email,
+        phone,
         membershipType,
         joinDate: new Date().toLocaleDateString()
     });
