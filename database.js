@@ -30,7 +30,8 @@ async function initializeDatabase() {
             email TEXT,
             phone TEXT,
             membership_type TEXT,
-            join_date DATE DEFAULT (date('now'))
+            join_date DATE DEFAULT (date('now')),
+            end_date DATE
         );
 
         CREATE TABLE IF NOT EXISTS workouts (

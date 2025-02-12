@@ -9,6 +9,10 @@
             <option value="Basic">Basic</option>
             <option value="Premium">Premium</option>
         </select>
+        <div class="form-group">
+            <label>Membership End Date:</label>
+            <input type="date" id="memberEndDate" required>
+        </div>
         <button class="add-btn" onclick="addNewMember()">Add Member</button>
     </div>
     
@@ -17,8 +21,11 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>phone</th>
                     <th>Membership</th>
                     <th>Join Date</th>
+                    <th>Membership End</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>

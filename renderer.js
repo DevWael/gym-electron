@@ -54,9 +54,16 @@ async function loadMembers() {
         const tbody = document.getElementById('membersList');
         tbody.innerHTML = members.map(member => `
             <tr>
-                <td>${member.name}</td>
+                <td>${member.name ?? ''}</td>
+                <td>${member.phone ?? ''}</td>
                 <td>${member.membership_type}</td>
                 <td>${member.join_date}</td>
+                <td>${member.end_date}</td>
+                <td class="status-cell">
+                    <span class="badge ${isActive(member.end_date) ? 'active' : 'expired'}">
+                        ${isActive(member.end_date) ? 'Active' : 'Expired'}
+                    </span>
+                </td>
                 <td>
                     <button class="delete-btn" onclick="deleteMember(${member.id})">Delete</button>
                 </td>
@@ -67,18 +74,23 @@ async function loadMembers() {
     }
 }
 
+function isActive(endDate) {
+    return new Date(endDate) > new Date();
+}
+
 async function addNewMember() {
     const name = document.getElementById('memberName').value.trim();
     const email = document.getElementById('memberEmail').value.trim() || null;
     const phone = document.getElementById('memberPhone').value.trim() || null;
     const membershipType = document.getElementById('membershipType').value;
+    const memberEndDate = document.getElementById('memberEndDate').value;
 
     try {
         if (!name || !membershipType) {
             throw new Error('Please fill in required fields');
         }
 
-        await window.api.addMember(name, email, phone, membershipType);
+        await window.api.addMember(name, email, phone, membershipType, memberEndDate);
         loadMembers();
         clearMemberForm();
     } catch (error) {
@@ -90,6 +102,7 @@ function clearMemberForm() {
     document.getElementById('memberName').value = '';
     document.getElementById('memberEmail').value = '';
     document.getElementById('memberPhone').value = '';
+    document.getElementById('memberEndDate').value = '';
     document.getElementById('membershipType').value = 'Basic';
 }
 
@@ -205,11 +218,15 @@ async function generateReport() {
 
     try {
         const report = await window.api.getMonthlyReport(month);
-        document.getElementById('totalPayments').textContent = `$${report.totalPayments}`;
-        document.getElementById('avgAttendance').textContent = report.avgAttendanceDays;
-        document.getElementById('activeMembers').textContent = report.activeMembers;
+        
+        document.getElementById('totalPayments').textContent = 
+            `$${report.totalPayments.toFixed(2)}`;
+        document.getElementById('avgAttendance').textContent = 
+            `${report.avgAttendanceDays} days`;
+        document.getElementById('activeMembers').textContent = 
+            report.activeMembers;
     } catch (error) {
-        alert('Error generating report: ' + error.message);
+        alert(error.message);
     }
 }
 

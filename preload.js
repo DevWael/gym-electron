@@ -7,9 +7,9 @@ contextBridge.exposeInMainWorld('api', {
     // Members
     getMembers: () => ipcRenderer.invoke('get-members'),
 
-    addMember: async (name, email, phone, membershipType) => {
+    addMember: async (name, email, phone, membershipType, endDate) => {
         try {
-            return await ipcRenderer.invoke('add-member', name, email, phone, membershipType);
+            return await ipcRenderer.invoke('add-member', name, email, phone, membershipType, endDate);
         } catch (error) {
             console.error('IPC Error:', error);
             throw error; // Rethrow to maintain original stack trace

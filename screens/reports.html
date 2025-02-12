@@ -1,15 +1,25 @@
 <div class="reports-screen">
-    <h2>Reports</h2>
+    <h2>Monthly Reports</h2>
     
-    <div class="report-filters">
-        <input type="month" id="reportMonth" class="form-control">
-        <button class="add-btn" onclick="loadReports()">Generate Report</button>
+    <div class="report-controls">
+        <input type="month" id="reportMonth" class="form-control" required>
+        <button class="add-btn" onclick="generateReport()">Generate Report</button>
     </div>
 
     <div class="report-results">
-        <h3>Monthly Summary</h3>
-        <p>Total Payments: <span id="totalPayments">0</span></p>
-        <p>Average Attendance: <span id="avgAttendance">0</span> days/member</p>
-        <p>Active Members: <span id="activeMembers">0</span></p>
+        <div class="stat-card">
+            <h3>Total Payments</h3>
+            <p id="totalPayments">$0.00</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Average Attendance</h3>
+            <p id="avgAttendance">0.0 days</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Active Members</h3>
+            <p id="activeMembers">0</p>
+        </div>
     </div>
 </div>
