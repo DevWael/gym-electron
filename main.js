@@ -18,8 +18,8 @@ async function createWindow() {
   });
   // check if in development
   if (process.env.NODE_ENV === 'development'){
-    win.webContents.openDevTools();
   }
+  // win.webContents.openDevTools();
 
   win.loadFile('index.html');
 }
