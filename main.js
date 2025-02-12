@@ -16,7 +16,10 @@ async function createWindow() {
 
     // show dev tools
   });
-  win.webContents.openDevTools();
+  // check if in development
+  if (process.env.NODE_ENV === 'development'){
+    win.webContents.openDevTools();
+  }
 
   win.loadFile('index.html');
 }

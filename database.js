@@ -1,21 +1,21 @@
-
 const initSqlJs = require('sql.js');
 const fs = require('fs');
 const path = require('path');
+const { app } = require('electron'); // Add this line to access Electron's app module
 
 let db;
-const dbPath = path.join(__dirname, 'gym.db');
+const dbPath = path.join(app.getPath('userData'), 'gym.db'); // Store database in user data directory
 
 async function initializeDatabase() {
     const SQL = await initSqlJs();
-    
+
     try {
         if (fs.existsSync(dbPath)) {
             const fileBuffer = fs.readFileSync(dbPath);
             db = new SQL.Database(fileBuffer);
         } else {
             db = new SQL.Database();
-            saveDatabase(); // Create initial empty database file
+            saveDatabase();
         }
     } catch (error) {
         console.error('Database error:', error);
@@ -73,5 +73,5 @@ function saveDatabase() {
 
 module.exports = {
     dbPromise: initializeDatabase(),
-    saveDatabase
+    saveDatabase: saveDatabase // Include the save function if needed
 };
