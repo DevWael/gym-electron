@@ -15,9 +15,9 @@ async function createWindow() {
       nodeIntegration: false
     }
   });
-  
+
   // win.webContents.openDevTools();
-  
+
   win.loadFile('index.html');
 }
 
@@ -44,19 +44,19 @@ ipcMain.handle('get-dashboard-stats', async () => {
 // Get Members Handler (corrected)
 ipcMain.handle('get-members', async (event, searchTerm) => {
   try {
-      if (!searchTerm) {
-          // Fetch all members
-          const stmt = db.prepare("SELECT *, strftime('%Y-%m-%d', join_date) as formatted_join_date, strftime('%Y-%m-%d', end_date) as formatted_end_date FROM members");
-          const members = [];
-          while (stmt.step()) {
-              members.push(stmt.getAsObject());
-          }
-          stmt.free();
-          return members;
-      } else {
-          // Prepare parameterized query with wildcard
-          const searchParam = `%${searchTerm}%`;
-          const stmt = db.prepare(`
+    if (!searchTerm) {
+      // Fetch all members
+      const stmt = db.prepare("SELECT *, strftime('%Y-%m-%d', join_date) as formatted_join_date, strftime('%Y-%m-%d', end_date) as formatted_end_date FROM members");
+      const members = [];
+      while (stmt.step()) {
+        members.push(stmt.getAsObject());
+      }
+      stmt.free();
+      return members;
+    } else {
+      // Prepare parameterized query with wildcard
+      const searchParam = `%${searchTerm}%`;
+      const stmt = db.prepare(`
               SELECT *,
               strftime('%Y-%m-%d', join_date) as formatted_join_date,
               strftime('%Y-%m-%d', end_date) as formatted_end_date 
@@ -67,83 +67,83 @@ ipcMain.handle('get-members', async (event, searchTerm) => {
                   phone LIKE ? COLLATE NOCASE OR 
                   LOWER(membership_type) LIKE ? COLLATE NOCASE
           `);
-          const members = [];
-          stmt.bind([searchParam, searchParam, searchParam, searchParam]);
-          while (stmt.step()) {
-              members.push(stmt.getAsObject());
-          }
-          stmt.free();
-          return members;
+      const members = [];
+      stmt.bind([searchParam, searchParam, searchParam, searchParam]);
+      while (stmt.step()) {
+        members.push(stmt.getAsObject());
       }
+      stmt.free();
+      return members;
+    }
   } catch (error) {
-      console.error('Error fetching members:', error);
-      throw new Error('Failed to fetch members');
+    console.error('Error fetching members:', error);
+    throw new Error('Failed to fetch members');
   }
 });
 
 ipcMain.handle('add-member', (_, name, email, phone, membershipType, startDate, endDate) => {
   try {
-      const cleanEmail = email || null;
-      const cleanPhone = phone || null;
+    const cleanEmail = email || null;
+    const cleanPhone = phone || null;
 
-      if (!name || !membershipType) {
-          throw new Error('Name and membership type are required');
-      }
+    if (!name || !membershipType) {
+      throw new Error('Name and membership type are required');
+    }
 
-      const stmt = db.prepare(`
+    const stmt = db.prepare(`
           INSERT INTO members 
           (name, email, phone, membership_type, join_date, end_date)
           VALUES (?, ?, ?, ?, ?, ?)
       `);
-      const info = stmt.run([name, cleanEmail, cleanPhone, membershipType, startDate, endDate]);
+    const info = stmt.run([name, cleanEmail, cleanPhone, membershipType, startDate, endDate]);
 
-      stmt.free();
-      saveDatabase();
-      return info.lastInsertRowid;
+    stmt.free();
+    saveDatabase();
+    return info.lastInsertRowid;
   } catch (error) {
-      throw new Error(`Failed to add member: ${error.message}`);
+    throw new Error(`Failed to add member: ${error.message}`);
   }
 });
 
 ipcMain.handle('get-member', async (_, id) => {
   try {
-      const stmt = db.prepare(`
+    const stmt = db.prepare(`
           SELECT *
           FROM members
           WHERE id = ?
       `);
-      const member = stmt.get([id]);
-      stmt.free();
-      return member;
+    const member = stmt.get([id]);
+    stmt.free();
+    return member;
   } catch (error) {
-      throw new Error('Failed to retrieve member: ' + error.message);
+    throw new Error('Failed to retrieve member: ' + error.message);
   }
 });
 
 ipcMain.handle('update-member', async (_, id, updates) => {
   try {
-      const allowedFields = [
-          'name',
-          'email',
-          'phone',
-          'membership_type',
-          'join_date',
-          'end_date'
-      ];
+    const allowedFields = [
+      'name',
+      'email',
+      'phone',
+      'membership_type',
+      'join_date',
+      'end_date'
+    ];
 
-      const fields = Object.keys(updates).filter(field => allowedFields.includes(field));
-      if (fields.length === 0) throw new Error('No valid fields to update');
+    const fields = Object.keys(updates).filter(field => allowedFields.includes(field));
+    if (fields.length === 0) throw new Error('No valid fields to update');
 
-      const queryParts = fields.map(field => `${field} = ?`).join(', ');
-      const values = Object.values(updates).map(value => value === null ? null : value);
-      values.push(id);
+    const queryParts = fields.map(field => `${field} = ?`).join(', ');
+    const values = Object.values(updates).map(value => value === null ? null : value);
+    values.push(id);
 
-      const stmt = db.prepare(`UPDATE members SET ${queryParts} WHERE id = ?`);
-      stmt.run(values);
-      stmt.free();
-      saveDatabase();
+    const stmt = db.prepare(`UPDATE members SET ${queryParts} WHERE id = ?`);
+    stmt.run(values);
+    stmt.free();
+    saveDatabase();
   } catch (error) {
-      throw new Error('Failed to update member: ' + error.message);
+    throw new Error('Failed to update member: ' + error.message);
   }
 });
 
@@ -168,7 +168,7 @@ ipcMain.handle('get-payments', () => {
 ipcMain.handle('add-payment', async (_, memberId, amount) => {
   const parsedMemberId = parseInt(memberId, 10);
   if (isNaN(parsedMemberId)) {
-      throw new Error('Invalid member ID');
+    throw new Error('Invalid member ID');
   }
 
   const stmt = db.prepare(`
@@ -202,7 +202,7 @@ ipcMain.handle('get-attendance', async () => {
 ipcMain.handle('record-checkin', async (_, memberId) => {
   const parsedMemberId = parseInt(memberId, 10);
   if (isNaN(parsedMemberId)) {
-      throw new Error('Invalid member ID');
+    throw new Error('Invalid member ID');
   }
 
   const stmt = db.prepare(`

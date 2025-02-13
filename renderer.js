@@ -199,7 +199,7 @@ async function loadPayments() {
 
         // Populate member dropdown
         const memberSelect = document.getElementById('paymentMember');
-        memberSelect.innerHTML = '<option value="">Select Member</option>' + 
+        memberSelect.innerHTML = '<option value="">Select Member</option>' +
             members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
 
         const tbody = document.getElementById('paymentsList');
@@ -241,7 +241,7 @@ async function loadAttendance() {
 
         // Populate member dropdown
         const memberSelect = document.getElementById('attendanceMember');
-        memberSelect.innerHTML = '<option value="">Select Member</option>' + 
+        memberSelect.innerHTML = '<option value="">Select Member</option>' +
             members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
 
         const tbody = document.getElementById('attendanceList');
