@@ -10,10 +10,15 @@
             <option value="Premium">Premium</option>
         </select>
         <div class="form-group">
+            <label>Membership Start Date:</label>
+            <input type="date" id="memberStartDate" required>
+        </div>
+        <div class="form-group">
             <label>Membership End Date:</label>
             <input type="date" id="memberEndDate" required>
         </div>
         <button class="add-btn" onclick="addNewMember()">Add Member</button>
+        <button class="cancel-btn" style="display: none;">Cancel</button>
     </div>
     
     <div class="table-container">

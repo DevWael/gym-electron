@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld('api', {
             throw error; // Rethrow to maintain original stack trace
         }
     },
-
+    updateMember: async (id, updates) => ipcRenderer.invoke('update-member', id, updates),
     deleteMember: (id) => ipcRenderer.invoke('delete-member', id),
 
     // Payments

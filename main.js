@@ -60,40 +60,55 @@ ipcMain.handle('get-members', () => {
   }
 });
 
-
-
-ipcMain.handle('add-member', (_, name, email, phone, membershipType, endDate) => {
+ipcMain.handle('add-member', (_, name, email, phone, membershipType, startDate, endDate) => {
   try {
-    // Convert undefined values to null
-    const cleanEmail = email || null;
-    const cleanPhone = phone || null;
+      const cleanEmail = email || null;
+      const cleanPhone = phone || null;
 
-    // Validate required fields
-    if (!name || !membershipType) {
-      throw new Error('Name and membership type are required');
-    }
+      if (!name || !membershipType) {
+          throw new Error('Name and membership type are required');
+      }
 
-    const stmt = db.prepare(`
-      INSERT INTO members 
-      (name, email, phone, membership_type, end_date)
-      VALUES (?, ?, ?, ?, ?)
-    `);
-    console.log('end date:', endDate);
-    const info = stmt.run([name, email, phone, membershipType, endDate]);
+      const stmt = db.prepare(`
+          INSERT INTO members 
+          (name, email, phone, membership_type, join_date, end_date)
+          VALUES (?, ?, ?, ?, ?, ?)
+      `);
+      const info = stmt.run([name, cleanEmail, cleanPhone, membershipType, startDate, endDate]);
 
-    stmt.free();
-    saveDatabase();
-    return info.lastInsertRowid;
+      stmt.free();
+      saveDatabase();
+      return info.lastInsertRowid;
   } catch (error) {
-    console.error('Database error details:', error);
-    throw new Error(`Failed to add member: ${error.message}`);
+      throw new Error(`Failed to add member: ${error.message}`);
   }
 });
 
-ipcMain.handle('update-member', (_, id, field, value) => {
-  db.prepare(`UPDATE members SET ${field} = ? WHERE id = ?`)
-    .run([value, id]);
-  saveDatabase();
+ipcMain.handle('update-member', async (_, id, updates) => {
+  try {
+      const allowedFields = [
+          'name',
+          'email',
+          'phone',
+          'membership_type',
+          'join_date',
+          'end_date'
+      ];
+
+      const fields = Object.keys(updates).filter(field => allowedFields.includes(field));
+      if (fields.length === 0) throw new Error('No valid fields to update');
+
+      const queryParts = fields.map(field => `${field} = ?`).join(', ');
+      const values = Object.values(updates).map(value => value === null ? null : value);
+      values.push(id);
+
+      const stmt = db.prepare(`UPDATE members SET ${queryParts} WHERE id = ?`);
+      stmt.run(values);
+      stmt.free();
+      saveDatabase();
+  } catch (error) {
+      throw new Error('Failed to update member: ' + error.message);
+  }
 });
 
 ipcMain.handle('delete-member', (_, id) => {

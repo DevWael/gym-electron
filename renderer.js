@@ -1,3 +1,5 @@
+var currentMembers = [];
+
 // Navigation and Screen Initialization
 function loadScreen(screenName) {
     fetch(`screens/${screenName}.html`)
@@ -50,9 +52,9 @@ async function loadDashboard() {
 // Member Management
 async function loadMembers() {
     try {
-        const members = await window.api.getMembers();
+        currentMembers = await window.api.getMembers();
         const tbody = document.getElementById('membersList');
-        tbody.innerHTML = members.map(member => `
+        tbody.innerHTML = currentMembers.map(member => `
             <tr>
                 <td>${member.name ?? ''}</td>
                 <td>${member.phone ?? ''}</td>
@@ -65,6 +67,7 @@ async function loadMembers() {
                     </span>
                 </td>
                 <td>
+                    <button class="edit-btn" onclick="editMember(${member.id})">Edit</button>
                     <button class="delete-btn" onclick="deleteMember(${member.id})">Delete</button>
                 </td>
             </tr>
@@ -83,18 +86,15 @@ async function addNewMember() {
     const email = document.getElementById('memberEmail').value.trim() || null;
     const phone = document.getElementById('memberPhone').value.trim() || null;
     const membershipType = document.getElementById('membershipType').value;
+    const memberStartDate = document.getElementById('memberStartDate').value;
     const memberEndDate = document.getElementById('memberEndDate').value;
 
     try {
-        if (!name || !membershipType) {
-            throw new Error('Please fill in required fields');
-        }
-
-        await window.api.addMember(name, email, phone, membershipType, memberEndDate);
+        await window.api.addMember(name, email, phone, membershipType, memberStartDate, memberEndDate);
         loadMembers();
         clearMemberForm();
     } catch (error) {
-        alert(error.message); // Show meaningful error
+        alert(error.message);
     }
 }
 
@@ -115,6 +115,56 @@ async function deleteMember(id) {
             alert('Error deleting member: ' + error.message);
         }
     }
+}
+
+function editMember(id) {
+    const member = currentMembers.find(m => m.id === id);
+    if (member) {
+        document.getElementById('memberName').value = member.name;
+        document.getElementById('memberEmail').value = member.email || '';
+        document.getElementById('memberPhone').value = member.phone || '';
+        document.getElementById('membershipType').value = member.membership_type;
+        document.getElementById('memberStartDate').value = member.join_date;
+        document.getElementById('memberEndDate').value = member.end_date;
+
+        const cancelBtn = document.querySelector('.cancel-btn');
+        cancelBtn.style.display = 'inline-block';
+        cancelBtn.onclick = cancelEdit;
+
+        const addBtn = document.querySelector('.add-member-form button.add-btn');
+        addBtn.textContent = 'Save Changes';
+        addBtn.onclick = () => saveMember(id);
+    } else {
+        alert('Member not found');
+    }
+}
+
+async function saveMember(id) {
+    const updates = {
+        name: document.getElementById('memberName').value.trim(),
+        email: document.getElementById('memberEmail').value.trim() || null,
+        phone: document.getElementById('memberPhone').value.trim() || null,
+        membership_type: document.getElementById('membershipType').value,
+        join_date: document.getElementById('memberStartDate').value,
+        end_date: document.getElementById('memberEndDate').value
+    };
+
+    try {
+        await window.api.updateMember(id, updates);
+        loadMembers();
+        cancelEdit();
+    } catch (error) {
+        alert('Error saving member: ' + error.message);
+    }
+}
+
+function cancelEdit() {
+    const cancelBtn = document.querySelector('.cancel-btn');
+    cancelBtn.style.display = 'none';
+    clearMemberForm();
+    const addBtn = document.querySelector('.add-member-form button.add-btn');
+    addBtn.textContent = 'Add Member';
+    addBtn.onclick = addNewMember;
 }
 
 // Payment Management
