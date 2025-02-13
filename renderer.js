@@ -275,8 +275,7 @@ async function recordCheckin() {
 // Reports Management
 async function loadReportsScreen() {
     // Set default month to current month
-    const now = new Date();
-    document.getElementById('reportMonth').value = now.toISOString().slice(0, 7);
+    document.getElementById('reportMonth').value = new Date().toISOString().slice(0, 7);
     await generateReport();
 }
 
@@ -298,7 +297,7 @@ async function generateReport() {
         document.getElementById('activeMembers').textContent =
             report.activeMembers;
     } catch (error) {
-        alert(error.message);
+        alert('Error generating report: ' + error.message);
     }
 }
 

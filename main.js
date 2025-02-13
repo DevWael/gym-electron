@@ -166,16 +166,13 @@ ipcMain.handle('get-payments', () => {
 });
 
 ipcMain.handle('add-payment', async (_, memberId, amount) => {
-  const parsedMemberId = parseInt(memberId, 10);
-  if (isNaN(parsedMemberId)) {
-    throw new Error('Invalid member ID');
-  }
-
   const stmt = db.prepare(`
       INSERT INTO payments (member_id, amount)
-      VALUES (:memberId, :amount)
+      VALUES (?, ?)
   `);
-  stmt.run({ ':memberId': parsedMemberId, ':amount': amount });
+  stmt.run([memberId, amount]);
+  stmt.free();
+  saveDatabase();
   return true;
 });
 
@@ -207,42 +204,50 @@ ipcMain.handle('record-checkin', async (_, memberId) => {
 
   const stmt = db.prepare(`
       INSERT INTO attendance (member_id)
-      VALUES (:memberId)
+      VALUES (?)
   `);
-  stmt.run({ ':memberId': parsedMemberId });
+  stmt.run([parsedMemberId]);
+  stmt.free();
+  saveDatabase();
   return true;
 });
 
 // Reports Handler
-ipcMain.handle('get-monthly-report', (_, month) => {
+ipcMain.handle('get-monthly-report', async (_, month) => {
   try {
     const [year, monthNumber] = month.split('-');
 
     // Total Payments
-    const payments = db.prepare(`
-          SELECT COALESCE(SUM(amount), 0) as totalPayments 
-          FROM payments 
-          WHERE strftime('%Y-%m', payment_date) = ?
-      `).get([`${year}-${monthNumber}`]);
+    const paymentsStmt = db.prepare(`
+      SELECT COALESCE(SUM(amount), 0) as totalPayments 
+      FROM payments 
+      WHERE strftime('%Y-%m', payment_date) = ?
+    `);
+    paymentsStmt.bind([`${year}-${monthNumber}`]);
+    const payments = paymentsStmt.getAsObject();
+    paymentsStmt.free();
 
     // Attendance Statistics
-    const attendance = db.prepare(`
-          SELECT 
-              COALESCE(COUNT(*), 0) as totalCheckins,
-              COALESCE(COUNT(DISTINCT member_id), 0) as uniqueMembers
-          FROM attendance 
-          WHERE strftime('%Y-%m', check_in) = ?
-      `).get([`${year}-${monthNumber}`]);
+    const attendanceStmt = db.prepare(`
+      SELECT 
+        COALESCE(COUNT(*), 0) as totalCheckins,
+        COALESCE(COUNT(DISTINCT member_id), 0) as uniqueMembers
+      FROM attendance 
+      WHERE strftime('%Y-%m', check_in) = ?
+    `);
+    attendanceStmt.bind([`${year}-${monthNumber}`]);
+    const attendance = attendanceStmt.getAsObject();
+    attendanceStmt.free();
 
     // Calculate average attendance safely
     const activeMembers = attendance.uniqueMembers;
-    const avgAttendance = activeMembers > 0
+    const avgAttendanceDays = activeMembers > 0
       ? (attendance.totalCheckins / activeMembers).toFixed(1)
       : '0.0';
 
     return {
       totalPayments: payments.totalPayments || 0,
-      avgAttendanceDays: avgAttendance || 0,
+      avgAttendanceDays: avgAttendanceDays,
       activeMembers: activeMembers
     };
   } catch (error) {
