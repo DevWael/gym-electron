@@ -19,7 +19,7 @@ async function createWindow() {
   // check if in development
   if (process.env.NODE_ENV === 'development'){
   }
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.loadFile('index.html');
 }
@@ -45,18 +45,42 @@ ipcMain.handle('get-dashboard-stats', async () => {
 });
 
 // Get Members Handler (corrected)
-ipcMain.handle('get-members', () => {
+ipcMain.handle('get-members', async (event, searchTerm) => {
   try {
-    const stmt = db.prepare("SELECT *, strftime('%Y-%m-%d', join_date) as join_date FROM members");
-    const members = [];
-    while (stmt.step()) {
-      members.push(stmt.getAsObject());
-    }
-    stmt.free();
-    return members;
+      if (!searchTerm) {
+          // Fetch all members
+          const stmt = db.prepare("SELECT *, strftime('%Y-%m-%d', join_date) as formatted_join_date, strftime('%Y-%m-%d', end_date) as formatted_end_date FROM members");
+          const members = [];
+          while (stmt.step()) {
+              members.push(stmt.getAsObject());
+          }
+          stmt.free();
+          return members;
+      } else {
+          // Prepare parameterized query with wildcard
+          const searchParam = `%${searchTerm}%`;
+          const stmt = db.prepare(`
+              SELECT *,
+              strftime('%Y-%m-%d', join_date) as formatted_join_date,
+              strftime('%Y-%m-%d', end_date) as formatted_end_date 
+              FROM members 
+              WHERE 
+                  LOWER(name) LIKE ? COLLATE NOCASE OR 
+                  email LIKE ? COLLATE NOCASE OR 
+                  phone LIKE ? COLLATE NOCASE OR 
+                  LOWER(membership_type) LIKE ? COLLATE NOCASE
+          `);
+          const members = [];
+          stmt.bind([searchParam, searchParam, searchParam, searchParam]);
+          while (stmt.step()) {
+              members.push(stmt.getAsObject());
+          }
+          stmt.free();
+          return members;
+      }
   } catch (error) {
-    console.error('Get members error:', error);
-    throw new Error('Failed to fetch members');
+      console.error('Error fetching members:', error);
+      throw new Error('Failed to fetch members');
   }
 });
 

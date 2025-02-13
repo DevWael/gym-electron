@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld('api', {
     getDashboardStats: () => ipcRenderer.invoke('get-dashboard-stats'),
 
     // Members
-    getMembers: () => ipcRenderer.invoke('get-members'),
+    getMembers: (searchTerm) => ipcRenderer.invoke('get-members', searchTerm),
 
     addMember: async (name, email, phone, membershipType, endDate) => {
         try {

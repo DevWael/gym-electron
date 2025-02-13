@@ -11,12 +11,19 @@ function loadScreen(screenName) {
 }
 
 function initializeScreen(screenName) {
-    switch(screenName) {
+    switch (screenName) {
         case 'dashboard':
             loadDashboard();
             break;
         case 'members':
             loadMembers();
+            const searchInput = document.getElementById('memberSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.trim().toLowerCase();
+                    loadMembers(searchTerm);
+                });
+            }
             break;
         case 'workouts':
             loadWorkouts();
@@ -50,31 +57,35 @@ async function loadDashboard() {
 }
 
 // Member Management
-async function loadMembers() {
+async function loadMembers(searchTerm = '') {
     try {
-        currentMembers = await window.api.getMembers();
-        const tbody = document.getElementById('membersList');
-        tbody.innerHTML = currentMembers.map(member => `
-            <tr>
-                <td>${member.name ?? ''}</td>
-                <td>${member.phone ?? ''}</td>
-                <td>${member.membership_type}</td>
-                <td>${member.join_date}</td>
-                <td>${member.end_date}</td>
-                <td class="status-cell">
-                    <span class="badge ${isActive(member.end_date) ? 'active' : 'expired'}">
-                        ${isActive(member.end_date) ? 'Active' : 'Expired'}
-                    </span>
-                </td>
-                <td>
-                    <button class="edit-btn" onclick="editMember(${member.id})">Edit</button>
-                    <button class="delete-btn" onclick="deleteMember(${member.id})">Delete</button>
-                </td>
-            </tr>
-        `).join('');
+        currentMembers = await window.api.getMembers(searchTerm);
+        renderMembersTable(currentMembers);
     } catch (error) {
         alert('Error loading members: ' + error.message);
     }
+}
+
+function renderMembersTable(members) {
+    const tbody = document.getElementById('membersList');
+    tbody.innerHTML = members.map(member => `
+        <tr>
+            <td>${member.name ?? ''}</td>
+            <td>${member.phone ?? ''}</td>
+            <td>${member.membership_type}</td>
+            <td>${member.join_date ?? ''}</td>
+            <td>${member.end_date ?? ''}</td>
+            <td class="status-cell">
+                <span class="badge ${isActive(member.end_date) ? 'active' : 'expired'}">
+                    ${isActive(member.end_date) ? 'Active' : 'Expired'}
+                </span>
+            </td>
+            <td>
+                <button class="edit-btn" onclick="editMember(${member.id})">Edit</button>
+                <button class="delete-btn" onclick="deleteMember(${member.id})">Delete</button>
+            </td>
+        </tr>
+    `).join('');
 }
 
 function isActive(endDate) {
@@ -246,7 +257,7 @@ async function loadReportsScreen() {
 
 async function generateReport() {
     const month = document.getElementById('reportMonth').value;
-    
+
     if (!month) {
         alert('Please select a month');
         return;
@@ -254,12 +265,12 @@ async function generateReport() {
 
     try {
         const report = await window.api.getMonthlyReport(month);
-        
-        document.getElementById('totalPayments').textContent = 
+
+        document.getElementById('totalPayments').textContent =
             `$${report.totalPayments.toFixed(2)}`;
-        document.getElementById('avgAttendance').textContent = 
+        document.getElementById('avgAttendance').textContent =
             `${report.avgAttendanceDays} days`;
-        document.getElementById('activeMembers').textContent = 
+        document.getElementById('activeMembers').textContent =
             report.activeMembers;
     } catch (error) {
         alert(error.message);

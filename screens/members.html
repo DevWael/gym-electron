@@ -1,6 +1,6 @@
 <div class="members-screen">
     <h2>Manage Members</h2>
-    
+
     <div class="add-member-form">
         <input type="text" id="memberName" placeholder="Member name" required>
         <input type="email" id="memberEmail" placeholder="Email (optional)">
@@ -20,8 +20,11 @@
         <button class="add-btn" onclick="addNewMember()">Add Member</button>
         <button class="cancel-btn" style="display: none;">Cancel</button>
     </div>
-    
+
     <div class="table-container">
+        <div class="search-controls">
+            <input type="text" id="memberSearch" placeholder="Search members..." class="search-input">
+        </div>
         <table id="membersTable">
             <thead>
                 <tr>
