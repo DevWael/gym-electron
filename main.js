@@ -13,14 +13,10 @@ async function createWindow() {
       contextIsolation: true,
       nodeIntegration: false
     }
-
-    // show dev tools
   });
-  // check if in development
-  if (process.env.NODE_ENV === 'development'){
-  }
+  
   // win.webContents.openDevTools();
-
+  
   win.loadFile('index.html');
 }
 

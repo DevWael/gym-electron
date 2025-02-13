@@ -52,6 +52,29 @@ body {
   line-height: 1.5;
 }
 
+.logo {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #727272;
+}
+
+.logo img {
+  display: block;
+  margin: 0 auto 1.5rem;
+  width: 120px;
+  height: 120px;
+  border: 2px solid rgba(255, 255, 255, 0.27);
+  border-radius: 50%;
+}
+
+.logo .app-title {
+  display: block;
+  text-align: center;
+}
+
 /* Navigation */
 .navbar {
   background: var(--secondary);
@@ -85,7 +108,7 @@ body {
 .nav-btn:is(:hover, :focus-visible) {
   background: var(--primary-dark);
   color: white;
-  transform: translateX(0.25rem);
+  /* transform: translateX(0.25rem); */
 }
 
 .nav-btn.active {
@@ -300,6 +323,20 @@ tr:hover {
 @media (max-width: 768px) {
   body {
     grid-template-columns: auto 1fr;
+  }
+
+  .logo {
+    border-bottom: none;
+    margin: 0;
+  }
+
+  .logo img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .logo .app-title {
+    display: none;
   }
 
   .navbar {
