@@ -1,7 +1,8 @@
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'; // Disable security warnings
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { dbPromise, saveDatabase } = require('./database');
-
 let db;
 
 async function createWindow() {
