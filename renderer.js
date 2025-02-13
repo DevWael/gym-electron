@@ -10,6 +10,15 @@ function loadScreen(screenName) {
         });
 }
 
+function loadMemberDetails(id) {
+    window.currentMemberId = id;
+    loadScreen('member-details');
+}
+
+function backToMembers() {
+    loadScreen('members');
+}
+
 function initializeScreen(screenName) {
     switch (screenName) {
         case 'dashboard':
@@ -36,6 +45,9 @@ function initializeScreen(screenName) {
             break;
         case 'reports':
             loadReportsScreen();
+            break;
+        case 'member-details':
+            loadMemberDetailsScreen();
             break;
     }
 }
@@ -83,6 +95,7 @@ function renderMembersTable(members) {
             <td>
                 <button class="edit-btn" onclick="editMember(${member.id})">Edit</button>
                 <button class="delete-btn" onclick="deleteMember(${member.id})">Delete</button>
+                <button class="view-btn" onclick="loadMemberDetails(${member.id})">View Details</button>
             </td>
         </tr>
     `).join('');
@@ -312,5 +325,33 @@ async function addNewWorkout() {
         document.getElementById('workoutDifficulty').value = 'Beginner';
     } catch (error) {
         alert('Error adding workout: ' + error.message);
+    }
+}
+
+async function loadMemberDetailsScreen() {
+    try {
+        const id = window.currentMemberId;
+        if (!id) {
+            alert('No member selected');
+            loadScreen('members');
+            return;
+        }
+
+        const member = await window.api.getMember(id);
+        if (!member) {
+            alert('Member not found');
+            loadScreen('members');
+            return;
+        }
+
+        document.getElementById('memberName').textContent = member[1];
+        document.getElementById('memberEmail').textContent = member[2] || 'N/A';
+        document.getElementById('memberPhone').textContent = member[3] || 'N/A';
+        document.getElementById('memberMembership').textContent = member[4];
+        document.getElementById('memberStartDate').textContent = member[5];
+        document.getElementById('memberEndDate').textContent = member[6];
+
+    } catch (error) {
+        alert('Error loading member details: ' + error.message);
     }
 }

@@ -3,10 +3,9 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('api', {
     // Dashboard
     getDashboardStats: () => ipcRenderer.invoke('get-dashboard-stats'),
-
+    
     // Members
     getMembers: (searchTerm) => ipcRenderer.invoke('get-members', searchTerm),
-
     addMember: async (name, email, phone, membershipType, endDate) => {
         try {
             return await ipcRenderer.invoke('add-member', name, email, phone, membershipType, endDate);
@@ -15,6 +14,7 @@ contextBridge.exposeInMainWorld('api', {
             throw error; // Rethrow to maintain original stack trace
         }
     },
+    getMember: (id) => ipcRenderer.invoke('get-member', id),
     updateMember: async (id, updates) => ipcRenderer.invoke('update-member', id, updates),
     deleteMember: (id) => ipcRenderer.invoke('delete-member', id),
 

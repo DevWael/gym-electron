@@ -19,7 +19,7 @@ async function createWindow() {
   // check if in development
   if (process.env.NODE_ENV === 'development'){
   }
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   win.loadFile('index.html');
 }
@@ -105,6 +105,21 @@ ipcMain.handle('add-member', (_, name, email, phone, membershipType, startDate, 
       return info.lastInsertRowid;
   } catch (error) {
       throw new Error(`Failed to add member: ${error.message}`);
+  }
+});
+
+ipcMain.handle('get-member', async (_, id) => {
+  try {
+      const stmt = db.prepare(`
+          SELECT *
+          FROM members
+          WHERE id = ?
+      `);
+      const member = stmt.get([id]);
+      stmt.free();
+      return member;
+  } catch (error) {
+      throw new Error('Failed to retrieve member: ' + error.message);
   }
 });
 
