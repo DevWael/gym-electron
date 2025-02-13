@@ -171,18 +171,11 @@ function cancelEdit() {
 async function loadPayments() {
     try {
         const payments = await window.api.getPayments();
-        const members = await window.api.getMembers();
-        
-        // Populate member dropdown
-        const memberSelect = document.getElementById('paymentMember');
-        memberSelect.innerHTML = '<option value="">Select Member</option>' + 
-            members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
-            
-        // Populate payments table
+
         const tbody = document.getElementById('paymentsList');
         tbody.innerHTML = payments.map(payment => `
             <tr>
-                <td>${payment.member_name}</td>
+                <td>${payment.member_name || '(Deleted Member)'}</td>
                 <td>$${payment.amount}</td>
                 <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
             </tr>
@@ -214,18 +207,11 @@ async function recordPayment() {
 async function loadAttendance() {
     try {
         const attendance = await window.api.getAttendance();
-        const members = await window.api.getMembers();
-        
-        // Populate member dropdown
-        const memberSelect = document.getElementById('attendanceMember');
-        memberSelect.innerHTML = '<option value="">Select Member</option>' + 
-            members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
-            
-        // Populate attendance table
+
         const tbody = document.getElementById('attendanceList');
         tbody.innerHTML = attendance.map(entry => `
             <tr>
-                <td>${entry.member_name}</td>
+                <td>${entry.member_name || '(Deleted Member)'}</td>
                 <td>${new Date(entry.check_in).toLocaleString()}</td>
             </tr>
         `).join('');
