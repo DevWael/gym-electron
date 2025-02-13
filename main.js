@@ -164,12 +164,17 @@ ipcMain.handle('get-payments', () => {
   return payments;
 });
 
-ipcMain.handle('add-payment', (_, memberId, amount) => {
+ipcMain.handle('add-payment', async (_, memberId, amount) => {
+  const parsedMemberId = parseInt(memberId, 10);
+  if (isNaN(parsedMemberId)) {
+      throw new Error('Invalid member ID');
+  }
+
   const stmt = db.prepare(`
-    INSERT INTO payments (member_id, amount)
-    VALUES (:memberId, :amount)
+      INSERT INTO payments (member_id, amount)
+      VALUES (:memberId, :amount)
   `);
-  stmt.run({ ':memberId': memberId, ':amount': amount });
+  stmt.run({ ':memberId': parsedMemberId, ':amount': amount });
   return true;
 });
 
@@ -193,20 +198,18 @@ ipcMain.handle('get-attendance', async () => {
   }
 });
 
-ipcMain.handle('record-checkin', (_, memberId) => {
-  try {
-    const stmt = db.prepare(`
-          INSERT INTO attendance (member_id)
-          VALUES (?)
-      `);
-    const info = stmt.run([memberId]);
-    stmt.free();
-    saveDatabase();
-    return info.lastInsertRowid;
-  } catch (error) {
-    console.error('Checkin error:', error);
-    throw new Error('Failed to record check-in');
+ipcMain.handle('record-checkin', async (_, memberId) => {
+  const parsedMemberId = parseInt(memberId, 10);
+  if (isNaN(parsedMemberId)) {
+      throw new Error('Invalid member ID');
   }
+
+  const stmt = db.prepare(`
+      INSERT INTO attendance (member_id)
+      VALUES (:memberId)
+  `);
+  stmt.run({ ':memberId': parsedMemberId });
+  return true;
 });
 
 // Reports Handler

@@ -195,6 +195,12 @@ function cancelEdit() {
 async function loadPayments() {
     try {
         const payments = await window.api.getPayments();
+        const members = await window.api.getMembers();
+
+        // Populate member dropdown
+        const memberSelect = document.getElementById('paymentMember');
+        memberSelect.innerHTML = '<option value="">Select Member</option>' + 
+            members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
 
         const tbody = document.getElementById('paymentsList');
         tbody.innerHTML = payments.map(payment => `
@@ -210,11 +216,11 @@ async function loadPayments() {
 }
 
 async function recordPayment() {
-    const memberId = document.getElementById('paymentMember').value;
+    const memberId = parseInt(document.getElementById('paymentMember').value, 10);
     const amount = document.getElementById('paymentAmount').value;
 
-    if (!memberId || !amount) {
-        alert('Please select a member and enter amount');
+    if (isNaN(memberId) || !amount) {
+        alert('Please select a member and enter an amount');
         return;
     }
 
@@ -231,6 +237,12 @@ async function recordPayment() {
 async function loadAttendance() {
     try {
         const attendance = await window.api.getAttendance();
+        const members = await window.api.getMembers();
+
+        // Populate member dropdown
+        const memberSelect = document.getElementById('attendanceMember');
+        memberSelect.innerHTML = '<option value="">Select Member</option>' + 
+            members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
 
         const tbody = document.getElementById('attendanceList');
         tbody.innerHTML = attendance.map(entry => `
@@ -245,9 +257,9 @@ async function loadAttendance() {
 }
 
 async function recordCheckin() {
-    const memberId = document.getElementById('attendanceMember').value;
+    const memberId = parseInt(document.getElementById('attendanceMember').value, 10);
 
-    if (!memberId) {
+    if (isNaN(memberId)) {
         alert('Please select a member');
         return;
     }

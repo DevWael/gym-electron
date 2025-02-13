@@ -56,6 +56,7 @@ async function initializeDatabase() {
             FOREIGN KEY(member_id) REFERENCES members(id)
         );
     `);
+    db.exec(`PRAGMA foreign_keys = ON;`);
     saveDatabase(); // Save table structure
     return db;
 }
