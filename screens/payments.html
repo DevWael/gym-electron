@@ -1,30 +1,46 @@
-<div class="payments-screen">
+<div class="payments-screen screen-padding">
     <h2>Payment Management</h2>
 
-    <div class="add-payment-form">
-        <div class="form-group">
-            <select id="paymentMember" class="form-control">
-                <option value="">Select Member</option>
-            </select>
+    <!-- Record Payment Form Card -->
+    <form id="addPaymentForm" class="card add-form" onsubmit="event.preventDefault();">
+        <h3 class="form-title">Record New Payment</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="paymentMember">Select Member*</label>
+                <select id="paymentMember" required>
+                    <option value="">Loading members...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="paymentAmount">Amount ($)*</label>
+                <input type="number" id="paymentAmount" placeholder="e.g., 50.00" min="0.01" step="0.01" required>
+            </div>
         </div>
-        <div class="form-group">
-            <input type="number" id="paymentAmount" placeholder="Amount">
+        <div class="form-actions">
+            <button type="button" id="recordPaymentBtn" class="button-primary add-btn">
+                <i class="fas fa-credit-card"></i> Record Payment
+            </button>
         </div>
-        <div class="form-group">
-            <button class="add-btn" onclick="recordPayment()">Record Payment</button>
-        </div>
-    </div>
+    </form>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Member</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody id="paymentsList"></tbody>
-        </table>
+    <!-- Payment History List Card -->
+    <div class="card list-container">
+        <h3>Payment History</h3>
+        <div class="table-wrapper">
+            <table id="paymentsTable" class="data-table"> <!-- Added ID -->
+                <thead>
+                    <tr>
+                        <th>Member</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsList">
+                    <!-- Populated by renderer.js -->
+                    <tr><td colspan="4">Loading payments...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

@@ -1,29 +1,54 @@
-<div class="member-details">
-    <h2>Member Details</h2>
+<div class="member-details-screen screen-padding">
+    <div class="screen-header">
+         <h2>Member Details</h2>
+         <button class="button-secondary" onclick="backToMembers()"><i class="fas fa-arrow-left"></i> Back to Members</button>
+    </div>
 
-    <div class="detail-item">
-        <label>Name:</label>
-        <span id="memberName"></span>
+    <div class="details-card card"> <!-- Wrap in a card -->
+        <div class="detail-item">
+            <label>Name:</label>
+            <span id="detail-memberName">Loading...</span>
+        </div>
+        <div class="detail-item">
+            <label>Status:</label>
+            <span id="detail-memberStatus" class="badge">Loading...</span>
+        </div>
+        <div class="detail-item">
+            <label>Email:</label>
+            <span id="detail-memberEmail">Loading...</span>
+        </div>
+        <div class="detail-item">
+            <label>Phone:</label>
+            <span id="detail-memberPhone">Loading...</span>
+        </div>
+        <div class="detail-item">
+            <label>Membership:</label>
+            <span id="detail-memberMembership">Loading...</span>
+        </div>
+        <div class="detail-item">
+            <label>Joined:</label>
+            <span id="detail-memberStartDate">Loading...</span>
+        </div>
+        <div class="detail-item">
+            <label>Expires:</label>
+            <span id="detail-memberEndDate">Loading...</span>
+        </div>
+         <!-- Add Edit button here later -->
+         <!-- <button class="button-primary" onclick="editCurrentMember()">Edit Member</button> -->
     </div>
-    <div class="detail-item">
-        <label>Email:</label>
-        <span id="memberEmail"></span>
+
+    <!-- Placeholder for future Payment History -->
+    <div class="related-info card">
+        <h3>Payment History</h3>
+        <p>Payment history details will appear here.</p>
+        <!-- Table/List for payments -->
     </div>
-    <div class="detail-item">
-        <label>Phone:</label>
-        <span id="memberPhone"></span>
+
+     <!-- Placeholder for future Attendance History -->
+    <div class="related-info card">
+        <h3>Attendance History</h3>
+        <p>Attendance history details will appear here.</p>
+         <!-- Table/List for attendance -->
     </div>
-    <div class="detail-item">
-        <label>Membership Type:</label>
-        <span id="memberMembership"></span>
-    </div>
-    <div class="detail-item">
-        <label>Start Date:</label>
-        <span id="memberStartDate"></span>
-    </div>
-    <div class="detail-item">
-        <label>End Date:</label>
-        <span id="memberEndDate"></span>
-    </div>
-    <button class="add-btn" onclick="backToMembers()">Back</button>
+
 </div>

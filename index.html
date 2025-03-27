@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
+    <!-- Recommended Meta Tag for Electron Security -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
     <title>SuperGym Pro</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="./style.css">
 </head>
-
 <body>
+    <div class="title-bar-drag-region"></div>
     <nav class="navbar">
         <div class="logo">
-            <img src="./icons/app.png" alt="logo">
-            <div class="app-title">SuperGym Pro</div>
+            <img src="./icons/app.png" alt="SuperGym Pro Logo">
+            <span class="app-title">SuperGym Pro</span>
         </div>
-        <button class="nav-btn" onclick="loadScreen('dashboard')">
-            <i class="fas fa-home"></i>
+        <!-- REMOVED onclick, ADDED data-screen -->
+        <button class="nav-btn active" data-screen="dashboard">
+            <i class="fas fa-tachometer-alt fa-fw"></i>
             <span>Dashboard</span>
         </button>
-        <button class="nav-btn" onclick="loadScreen('members')">
-            <i class="fas fa-users"></i>
+        <button class="nav-btn" data-screen="members">
+            <i class="fas fa-users fa-fw"></i>
             <span>Members</span>
         </button>
-        <button class="nav-btn" onclick="loadScreen('payments')">
-            <i class="fas fa-credit-card"></i>
+         <button class="nav-btn" data-screen="workouts">
+            <i class="fas fa-dumbbell fa-fw"></i>
+            <span>Workouts</span>
+        </button>
+        <button class="nav-btn" data-screen="payments">
+            <i class="fas fa-credit-card fa-fw"></i>
             <span>Payments</span>
         </button>
-        <button class="nav-btn" onclick="loadScreen('attendance')">
-            <i class="fas fa-clipboard-check"></i>
+        <button class="nav-btn" data-screen="attendance">
+            <i class="fas fa-clipboard-check fa-fw"></i>
             <span>Attendance</span>
         </button>
-        <button class="nav-btn" onclick="loadScreen('reports')">
-            <i class="fas fa-chart-bar"></i>
+        <button class="nav-btn" data-screen="reports">
+            <i class="fas fa-chart-line fa-fw"></i>
             <span>Reports</span>
         </button>
+        <!-- Add Settings/Logout later if needed -->
     </nav>
 
-    <div id="content" class="content"></div>
+    <main id="content" class="content"></main>
 
-    <script src="data.js"></script>
+    <!-- Renderer Process Script -->
     <script src="renderer.js"></script>
 </body>
-
 </html>

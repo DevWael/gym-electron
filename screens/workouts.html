@@ -1,27 +1,58 @@
-<div class="workouts-screen">
+<div class="workouts-screen screen-padding">
     <h2>Manage Workouts</h2>
-    
-    <div class="add-workout-form">
-        <input type="text" id="workoutName" placeholder="Workout name">
-        <input type="number" id="workoutDuration" placeholder="Duration (mins)">
-        <select id="workoutDifficulty">
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-        </select>
-        <button class="add-btn" onclick="addNewWorkout()">Add Workout</button>
-    </div>
 
-    <div class="table-container">
-        <table id="workoutsTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Duration</th>
-                    <th>Difficulty</th>
-                </tr>
-            </thead>
-            <tbody id="workoutsList"></tbody>
-        </table>
+    <!-- Add/Edit Form Card -->
+    <form id="addWorkoutForm" class="card add-form" onsubmit="event.preventDefault();">
+        <h3 class="form-title">Add New Workout</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="workoutName">Workout Name*</label>
+                <input type="text" id="workoutName" placeholder="e.g., Bench Press, Morning Yoga" required>
+            </div>
+            <div class="form-group">
+                <label for="workoutDuration">Duration (mins)*</label>
+                <input type="number" id="workoutDuration" placeholder="e.g., 30" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="workoutDifficulty">Difficulty*</label>
+                <select id="workoutDifficulty" required>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="All Levels">All Levels</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-actions">
+            <!-- Removed onclick, added type="submit" or keep type="button" and rely on JS listener below -->
+            <button type="button" id="addWorkoutBtn" class="button-primary add-btn">
+                 <i class="fas fa-plus"></i> Add Workout
+            </button>
+            <!-- Add Cancel button for editing later -->
+            <!-- <button type="button" class="button-secondary cancel-btn" style="display: none;">Cancel</button> -->
+        </div>
+    </form>
+
+    <!-- Workouts List Card -->
+    <div class="card list-container">
+        <h3>Current Workouts</h3>
+        <!-- Add Search/Filter Toolbar later if needed -->
+        <!-- <div class="toolbar"> ... </div> -->
+        <div class="table-wrapper">
+            <table id="workoutsTable" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Duration</th>
+                        <th>Difficulty</th>
+                        <th>Actions</th> <!-- Added Actions column -->
+                    </tr>
+                </thead>
+                <tbody id="workoutsList">
+                    <!-- Populated by renderer.js -->
+                    <tr><td colspan="4">Loading workouts...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

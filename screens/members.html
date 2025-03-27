@@ -1,54 +1,74 @@
-<div class="members-screen">
+<div class="members-screen screen-padding">
     <h2>Manage Members</h2>
 
-    <div class="add-member-form">
-        <div class="form-group">
-            <input type="text" id="memberName" placeholder="Member name" required>
+    <!-- Use a form element -->
+    <form id="addMemberForm" class="card add-form" onsubmit="event.preventDefault();">
+        <h3 class="form-title">Add / Edit Member</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="memberName">Member Name*</label>
+                <input type="text" id="memberName" placeholder="Enter full name" required>
+            </div>
+            <div class="form-group">
+                <label for="memberEmail">Email</label>
+                <input type="email" id="memberEmail" placeholder="example@mail.com">
+            </div>
+            <div class="form-group">
+                <label for="memberPhone">Phone</label>
+                <input type="tel" id="memberPhone" placeholder="+1 555-123-4567">
+            </div>
+            <div class="form-group">
+                <label for="membershipType">Membership Type*</label>
+                <select id="membershipType" required>
+                    <option value="Basic">Basic</option>
+                    <option value="Premium">Premium</option>
+                    <option value="VIP">VIP</option> <!-- Added option -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="memberStartDate">Start Date*</label>
+                <input type="date" id="memberStartDate" required>
+            </div>
+            <div class="form-group">
+                <label for="memberEndDate">End Date*</label>
+                <input type="date" id="memberEndDate" required>
+            </div>
         </div>
-        <div class="form-group">
-            <input type="email" id="memberEmail" placeholder="Email (optional)">
+        <div class="form-actions">
+             <!-- Button type="button" or handle form submit event -->
+            <button type="button" class="button-primary add-btn" onclick="addNewMember()">Add Member</button>
+            <button type="button" class="button-secondary cancel-btn" style="display: none;" onclick="cancelEdit()">Cancel</button>
         </div>
-        <div class="form-group">
-            <input type="tel" id="memberPhone" placeholder="Phone (optional)">
-        </div>
-        <br>
-        <div class="form-group"></div>
-        <div class="form-group">
-            <label>Membership Type:</label>
-            <select id="membershipType" required>
-                <option value="Basic">Basic</option>
-                <option value="Premium">Premium</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Membership Start Date:</label>
-            <input type="date" id="memberStartDate" required>
-        </div>
-        <div class="form-group">
-            <label>Membership End Date:</label>
-            <input type="date" id="memberEndDate" required>
-        </div>
-        <button class="add-btn" onclick="addNewMember()">Add Member</button>
-        <button class="cancel-btn" style="display: none;">Cancel</button>
-    </div>
+    </form>
 
-    <div class="table-container">
-        <div class="search-controls">
-            <input type="text" id="memberSearch" placeholder="Search members..." class="search-input">
+    <div class="card list-container"> <!-- Wrap table in card -->
+        <h3>Current Members</h3>
+        <div class="toolbar">
+             <div class="search-controls">
+                <i class="fas fa-search"></i>
+                <input type="search" id="memberSearch" placeholder="Search by name, email, phone..." class="search-input">
+            </div>
+            <!-- Add Filter/Sort options later -->
         </div>
-        <table id="membersTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>phone</th>
-                    <th>Membership</th>
-                    <th>Join Date</th>
-                    <th>Membership End</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="membersList"></tbody>
-        </table>
+        <div class="table-wrapper">
+            <table id="membersTable" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Membership</th>
+                        <th>Joined</th>
+                        <th>Expires</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="membersList">
+                    <!-- Rows will be populated by renderer.js -->
+                    <tr><td colspan="8">Loading members...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

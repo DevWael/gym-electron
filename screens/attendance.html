@@ -1,29 +1,43 @@
-<div class="attendance-screen">
+<div class="attendance-screen screen-padding">
     <h2>Attendance Tracking</h2>
 
-    <div class="attendance-controls">
-        <div class="form-group">
-            <select id="attendanceMember" class="form-control">
-                <option value="">Select Member</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <button class="add-btn" onclick="recordCheckin()">
-                <i class="fas fa-user-check"></i>
-                Record Check-in
-            </button>
-        </div>
-    </div>
+    <!-- Record Check-in Form Card -->
+    <form id="addAttendanceForm" class="card add-form" onsubmit="event.preventDefault();">
+         <h3 class="form-title">Record Member Check-in</h3>
+         <div class="form-grid">
+            <div class="form-group">
+                <label for="attendanceMember">Select Member*</label>
+                <select id="attendanceMember" required>
+                    <option value="">Loading members...</option>
+                </select>
+            </div>
+            <div class="form-group"> <!-- Added to align button -->
+                 <label> </label> <!-- Placeholder label for alignment -->
+                 <button type="button" id="recordCheckinBtn" class="button-primary add-btn">
+                    <i class="fas fa-user-check"></i> Record Check-in
+                </button>
+            </div>
+         </div>
+         <!-- Removed form-actions as button is in grid now -->
+    </form>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Member</th>
-                    <th>Check-in Time</th>
-                </tr>
-            </thead>
-            <tbody id="attendanceList"></tbody>
-        </table>
+    <!-- Attendance History List Card -->
+    <div class="card list-container">
+        <h3>Check-in History</h3>
+        <div class="table-wrapper">
+            <table id="attendanceTable" class="data-table"> <!-- Added ID -->
+                <thead>
+                    <tr>
+                        <th>Member</th>
+                        <th>Check-in Time</th>
+                        <th>Actions</th> <!-- Optional: Add if delete is needed -->
+                    </tr>
+                </thead>
+                <tbody id="attendanceList">
+                    <!-- Populated by renderer.js -->
+                     <tr><td colspan="3">Loading attendance...</td></tr> <!-- Adjusted colspan -->
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
